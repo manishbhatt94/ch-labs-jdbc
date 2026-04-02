@@ -1,0 +1,36 @@
+## Download the JDBC MySQL Driver JAR file
+- Go to https://mvnrepository.com/artifact/com.mysql/mysql-connector-j/8.2.0
+- Under the "Overview" tab, there is a "Files" line item.
+- This has a button called "jar (2.4 MB)". Click this button.
+- Clicking it, will start the download of the JAR file in your Downloads folder.
+
+
+## Add JDBC Driver JAR to the project manually
+
+- Right-click the project, and select Properties from the context menu.
+- From the Project Properties popup, select Java Build Path menu option from
+the left side-bar.
+- Then select the "Libraries" tab from the main section. This Libraries tab
+represents the classpath.
+- Now, the right-hand side has some buttons - select the "Add Library" button.
+- This opens the "Add Library" popup. Select "User Library" from the list and
+click Next.
+- Now we see a list of previously created "User Libraries" - which can be empty
+if we have not yet added any.
+- If we have not previously added mysql-connector-j JAR to a user library, then
+we will do that now.
+- Click the "User Libraries..." button on the right-hand side.
+- A new popup opens up. Here click the "New..." button from the right-hand side.
+- Which opens a tiny dialog box "New User Library" - where we need to enter a
+name for our library. Enter any name and click "OK" button. E.g. I used the
+name "mysql-connector-8.2.0" and clicked "OK".
+- This creates a new entry with this name in the previous popup's list of
+"Defined user libraries:" with the name we provided in previous step, i.e.
+"mysql-connector-8.2.0".
+- Select this "mysql-connector-8.2.0" item.
+- And click on the "Add External JARs..." button from the right-hand side.
+- Select the downloaded JAR from the file-picker.
+- Then click "Apply and Close" button at the bottom of the popup.
+- Click "Finish" button from the previous popup.
+- Finally, click the "Apply and Close" button from the original project
+properties "Java Build Path" popup.
