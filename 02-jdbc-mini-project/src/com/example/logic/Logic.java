@@ -31,11 +31,11 @@ public class Logic {
 
 		while (true) {
 			System.out.println("\n=========MENU=========");
-			System.out.println("Press-1 : INSERT DATA");
-			System.out.println("Press-2 : READ DATA");
-			System.out.println("Press-3 : UPDATE DATA");
-			System.out.println("Press-4 : DELETE DATA");
-			System.out.println("Press-5 : EXIT\n");
+			System.out.println("Press-" + INSERT_DATA + " : INSERT DATA");
+			System.out.println("Press-" + READ_DATA + " : READ DATA");
+			System.out.println("Press-" + UPDATE_DATA + " : UPDATE DATA");
+			System.out.println("Press-" + DELETE_DATA + " : DELETE DATA");
+			System.out.println("Press-" + EXIT + " : EXIT\n");
 			System.out.print("Enter Your Choice: ");
 			int choice = 0;
 
@@ -64,6 +64,7 @@ public class Logic {
 
 			// Here, choice is an integer in the range [1, 5].
 			switch (choice) {
+
 			case INSERT_DATA:
 				System.out.println("*************INSERT DATA************");
 				System.out.println("ENTER USERNAME");
@@ -80,6 +81,7 @@ public class Logic {
 				EmployeeDTO employeeDTO = new EmployeeDTO(username, password, fullname, address, salary);
 				crud.insert(employeeDTO);
 				break;
+
 			case READ_DATA:
 				System.out.println("******************READ DATA********************");
 				System.out.println("ENTER USERNAME");
@@ -88,6 +90,7 @@ public class Logic {
 				password = scanner.next();
 				crud.read(username, password);
 				break;
+
 			case UPDATE_DATA:
 				System.out.println("*********************UPDATE DATA*****************");
 				System.out.println("ENTER USERNAME");
@@ -96,16 +99,19 @@ public class Logic {
 				salary = scanner.nextInt();
 				crud.update(username, salary);
 				break;
+
 			case DELETE_DATA:
 				System.out.println("*********************DELETE DATA*****************");
 				System.out.println("ENTER USERNAME");
 				username = scanner.next();
 				crud.delete(username);
 				break;
+
 			case EXIT:
 				System.out.println("EXIT");
 				scanner.close();
 				return;
+
 			}
 		}
 
