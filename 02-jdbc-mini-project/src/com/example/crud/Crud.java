@@ -1,6 +1,7 @@
 package com.example.crud;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -110,18 +111,92 @@ public class Crud {
 	}
 
 	public void read(String username, String password) {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			// @formatter:off
+			String sql = "SELECT * FROM employee WHERE username = '" + username + "' AND password = '" + password + "';";
+			System.out.println("Running SQL:--> " + sql);
 
+			/* Sample Input For SQL Injection: */
+			// username: raju123
+			// password: notsure' OR 'abc' = 'abc
+
+			// @formatter:on
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(sql);
+
+			if (resultSet.next()) {
+				int snValue = resultSet.getInt("sn");
+				String usernameValue = resultSet.getString("username");
+				String passwordValue = resultSet.getString("password");
+				String fullnameValue = resultSet.getString("fullname");
+				String addressValue = resultSet.getString("address");
+				int salaryValue = resultSet.getInt("salary");
+				System.out.println("sn: " + snValue);
+				System.out.println("username: " + usernameValue);
+				System.out.println("password: " + passwordValue);
+				System.out.println("fullname: " + fullnameValue);
+				System.out.println("address: " + addressValue);
+				System.out.println("salary: " + salaryValue);
+			} else {
+				System.out.println("USER NOT FOUND");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.close(resultSet);
+			ConnectionFactory.close(statement);
+			ConnectionFactory.close(connection);
+		}
 	}
 
 	public void update(String username, int salary) {
-		// TODO Auto-generated method stub
-
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			// @formatter:off
+			String sql = "UPDATE employee SET salary = " + salary + " WHERE username ='" + username + "';";
+			// @formatter:on
+			statement = connection.createStatement();
+			int affectedRowCount = statement.executeUpdate(sql);
+			if (affectedRowCount > 0) {
+				System.out.println("DATA UPDATED");
+			} else {
+				System.out.println("USER NOT FOUND");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.close(statement);
+			ConnectionFactory.close(connection);
+		}
 	}
 
 	public void delete(String username) {
-		// TODO Auto-generated method stub
-
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			// @formatter:off
+			String sql = "DELETE FROM employee WHERE username ='" + username + "';";
+			// @formatter:on
+			statement = connection.createStatement();
+			int affectedRowCount = statement.executeUpdate(sql);
+			if (affectedRowCount > 0) {
+				System.out.println("DATA DELETED");
+			} else {
+				System.out.println("USER NOT FOUND");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.close(statement);
+			ConnectionFactory.close(connection);
+		}
 	}
 
 }

@@ -85,9 +85,10 @@ public class Logic {
 			case READ_DATA:
 				System.out.println("******************READ DATA********************");
 				System.out.println("ENTER USERNAME");
-				username = scanner.next();
+				scanner.nextLine(); // Clear previous input buffer, for fresh nextLine() call below
+				username = scanner.nextLine();
 				System.out.println("ENTER PASSWORD");
-				password = scanner.next();
+				password = scanner.nextLine();
 				crud.read(username, password);
 				break;
 
