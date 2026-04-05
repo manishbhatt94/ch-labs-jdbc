@@ -1,6 +1,7 @@
 package com.example.crud;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -85,39 +86,39 @@ public class Crud {
 
 	public void insert(EmployeeDTO employeeDTO) {
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = ConnectionFactory.getConnection();
 			// @formatter:off
-			String sql = "INSERT INTO employee (\n"
-					+ "username, password, fullname, address, salary\n"
-					+ ") VALUES (\n"
-					+ "'" + employeeDTO.getUsername() + "',\n"
-					+ "'" + employeeDTO.getPassword() + "',\n"
-					+ "'" + employeeDTO.getFullname() + "',\n"
-					+ "'" + employeeDTO.getAddress() + "',\n"
-					+ "" + employeeDTO.getSalary() + "\n"
-					+ ");";
+			String sql = "INSERT INTO employee (username, password, fullname, address, salary)\n"
+					+ " VALUES (?, ?, ?, ?, ?);";
 			// @formatter:on
-			statement = connection.createStatement();
-			statement.executeUpdate(sql);
+			preparedStatement = connection.prepareStatement(sql); // <- Parameterized SQL string compiled here.
+
+			preparedStatement.setString(1, employeeDTO.getUsername());
+			preparedStatement.setString(2, employeeDTO.getPassword());
+			preparedStatement.setString(3, employeeDTO.getFullname());
+			preparedStatement.setString(4, employeeDTO.getAddress());
+			preparedStatement.setInt(5, employeeDTO.getSalary());
+
+			preparedStatement.executeUpdate();
 			System.out.println("DATA INSERTED");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionFactory.close(statement);
+			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
 		}
 	}
 
 	public void read(String username, String password) {
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
 			connection = ConnectionFactory.getConnection();
 			// @formatter:off
-			String sql = "SELECT * FROM employee WHERE username = '" + username + "' AND password = '" + password + "';";
+			String sql = "SELECT * FROM employee WHERE username = ? AND password = ?;";
 			System.out.println("Running SQL:--> " + sql);
 
 			/* Sample Input For SQL Injection: */
@@ -125,8 +126,12 @@ public class Crud {
 			// password: notsure' OR 'abc' = 'abc
 
 			// @formatter:on
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(sql);
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, password);
+
+			resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
 				int snValue = resultSet.getInt("sn");
@@ -148,21 +153,25 @@ public class Crud {
 			e.printStackTrace();
 		} finally {
 			ConnectionFactory.close(resultSet);
-			ConnectionFactory.close(statement);
+			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
 		}
 	}
 
 	public void update(String username, int salary) {
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = ConnectionFactory.getConnection();
 			// @formatter:off
-			String sql = "UPDATE employee SET salary = " + salary + " WHERE username ='" + username + "';";
+			String sql = "UPDATE employee SET salary = ? WHERE username = ?;";
 			// @formatter:on
-			statement = connection.createStatement();
-			int affectedRowCount = statement.executeUpdate(sql);
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setInt(1, salary);
+			preparedStatement.setString(2, username);
+
+			int affectedRowCount = preparedStatement.executeUpdate();
 			if (affectedRowCount > 0) {
 				System.out.println("DATA UPDATED");
 			} else {
@@ -171,21 +180,24 @@ public class Crud {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionFactory.close(statement);
+			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
 		}
 	}
 
 	public void delete(String username) {
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = ConnectionFactory.getConnection();
 			// @formatter:off
-			String sql = "DELETE FROM employee WHERE username ='" + username + "';";
+			String sql = "DELETE FROM employee WHERE username = ?;";
 			// @formatter:on
-			statement = connection.createStatement();
-			int affectedRowCount = statement.executeUpdate(sql);
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, username);
+
+			int affectedRowCount = preparedStatement.executeUpdate();
 			if (affectedRowCount > 0) {
 				System.out.println("DATA DELETED");
 			} else {
@@ -194,7 +206,7 @@ public class Crud {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionFactory.close(statement);
+			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
 		}
 	}
