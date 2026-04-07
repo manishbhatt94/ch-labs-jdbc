@@ -11,7 +11,8 @@ public class Logic {
 	private final int READ_DATA = 2;
 	private final int UPDATE_DATA = 3;
 	private final int DELETE_DATA = 4;
-	private final int EXIT = 5;
+	private final int TEST_DATA = 5;
+	private final int EXIT = 6;
 	private static final int MAX_ATTEMPTS = 3;
 	private String username;
 	private String password;
@@ -35,6 +36,7 @@ public class Logic {
 			System.out.println("Press-" + READ_DATA + " : READ DATA");
 			System.out.println("Press-" + UPDATE_DATA + " : UPDATE DATA");
 			System.out.println("Press-" + DELETE_DATA + " : DELETE DATA");
+			System.out.println("Press-" + TEST_DATA + " : TEST DATA");
 			System.out.println("Press-" + EXIT + " : EXIT\n");
 			System.out.print("Enter Your Choice: ");
 			int choice = 0;
@@ -42,7 +44,7 @@ public class Logic {
 			try {
 				choice = scanner.nextInt();
 			} catch (Exception e) { // <- non-integer input entered.
-				System.out.print("Invalid Input! Please take a number from 1 to 5.\n");
+				System.out.print("Invalid Input! Please take a number from 1 to 6.\n");
 				scanner.nextLine(); // <- Clear input buffer.
 				attempt++;
 				if (attempt >= MAX_ATTEMPTS) {
@@ -52,8 +54,8 @@ public class Logic {
 				}
 				continue;
 			}
-			if (choice < 1 || choice > 5) { // <- Range of choice entered is invalid.
-				System.out.print("Invalid Input! Please take a value from 1 to 5.\n");
+			if (choice < 1 || choice > 6) { // <- Range of choice entered is invalid.
+				System.out.print("Invalid Input! Please take a value from 1 to 6.\n");
 				attempt++;
 				if (attempt >= MAX_ATTEMPTS) {
 					System.out.print("You have reached the limit");
@@ -106,6 +108,20 @@ public class Logic {
 				System.out.println("ENTER USERNAME");
 				username = scanner.next();
 				crud.delete(username);
+				break;
+
+			case TEST_DATA:
+				System.out.println("*********************TEST DATA*****************");
+				String sql1 = "SELECT * FROM employee;";
+				String sql2 = "INSERT INTO employee (username, password, fullname, address, salary) "
+						+ "VALUES ('test', 'test123', 'testname', 'testadd', 2000);";
+				System.out.println("P1->SELECT\nP2->NON SELECT");
+				int testChoice = scanner.nextInt();
+				if (testChoice == 1) {
+					crud.test(sql1);
+				} else {
+					crud.test(sql2);
+				}
 				break;
 
 			case EXIT:

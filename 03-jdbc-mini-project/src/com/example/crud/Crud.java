@@ -133,28 +133,32 @@ public class Crud {
 
 			resultSet = preparedStatement.executeQuery();
 
-			if (resultSet.next()) {
-				int snValue = resultSet.getInt("sn");
-				String usernameValue = resultSet.getString("username");
-				String passwordValue = resultSet.getString("password");
-				String fullnameValue = resultSet.getString("fullname");
-				String addressValue = resultSet.getString("address");
-				int salaryValue = resultSet.getInt("salary");
-				System.out.println("sn: " + snValue);
-				System.out.println("username: " + usernameValue);
-				System.out.println("password: " + passwordValue);
-				System.out.println("fullname: " + fullnameValue);
-				System.out.println("address: " + addressValue);
-				System.out.println("salary: " + salaryValue);
-			} else {
-				System.out.println("USER NOT FOUND");
-			}
+			readResult(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
+		}
+	}
+
+	private void readResult(ResultSet resultSet) throws SQLException {
+		if (resultSet.next()) {
+			int snValue = resultSet.getInt("sn");
+			String usernameValue = resultSet.getString("username");
+			String passwordValue = resultSet.getString("password");
+			String fullnameValue = resultSet.getString("fullname");
+			String addressValue = resultSet.getString("address");
+			int salaryValue = resultSet.getInt("salary");
+			System.out.println("sn: " + snValue);
+			System.out.println("username: " + usernameValue);
+			System.out.println("password: " + passwordValue);
+			System.out.println("fullname: " + fullnameValue);
+			System.out.println("address: " + addressValue);
+			System.out.println("salary: " + salaryValue);
+		} else {
+			System.out.println("USER NOT FOUND");
 		}
 	}
 
@@ -206,6 +210,37 @@ public class Crud {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			ConnectionFactory.close(preparedStatement);
+			ConnectionFactory.close(connection);
+		}
+	}
+
+	public void test(String sql) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			System.out.println("Compiled unknown dynamic Query: " + sql);
+
+			boolean hasResultSet = preparedStatement.execute();
+			System.out.println("Executed this Query using execute() method of PreparedStatement interface.");
+
+			if (hasResultSet) {
+				System.out.println("This Query produces a result set.");
+				resultSet = preparedStatement.getResultSet();
+				readResult(resultSet);
+				System.out.println("Finished reading this Query's result set.");
+			} else {
+				System.out.println("This Query did not produce any results.");
+				int updateCount = preparedStatement.getUpdateCount();
+				System.out.println("This Query performed an update count of " + updateCount + ".");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
 		}
