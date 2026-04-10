@@ -1,52 +1,91 @@
 package com.mainapp;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Launch {
 
 	public static void main(String[] args) {
-		printJvmInfo();
 		runDemo();
 	}
 
 	private static void runDemo() {
 
-		try {
-			// Load & Register MySQL driver:
-			// (Note: Below line throws ClassNotFoundException checked exception)
-			// Class.forName("com.mysql.cj.jdbc.Driver"); // <- This is optional now.
-			// Manually loading the Driver is optional since JDBC Specification version 4.0+
-			// which was supported starting Java SE 6 (in year 2003) onwards.
+		Connection connection = null;
+		CallableStatement callableStatement = null;
+		ResultSet resultSet = null;
 
-			String url = "jdbc:mysql://localhost:3306";
+		try {
+
+			String url = "jdbc:mysql://localhost:3306/ch_labs_jdbc_01";
 			String username = "root";
 			String password = "manish";
 
-			// (Note: Below line throws SQLException checked exception)
-			Connection connection = DriverManager.getConnection(url, username, password);
-			// <- DriverManager.getConnection is a static factory method which gives
-			// an object of an implementation class of the Connection interface.
-			// Here we see the FACTORY DESIGN PATTERN being used!
+			connection = DriverManager.getConnection(url, username, password);
 
-			System.out.println(connection); // Prints: com.mysql.cj.jdbc.ConnectionImpl@2f943d71
+			// MySQL command to invoke the stored procedure using CALL statement:
+			// CALL employees_nameStartsWith_salaryGte('ka', 12000);
+
+			//
+			// Prepare a call to the stored procedure 'employees_nameStartsWith_salaryGte'
+			// with two parameters
+			//
+			// Notice the use of JDBC-escape syntax ({CALL ...})
+			//
+
+			// Notice that you have to use JDBC escape syntax - i.e. the curly brace pair,
+			// and that the parentheses surrounding the parameter placeholders are not
+			// optional:
+
+			callableStatement = connection
+					.prepareCall("{CALL employees_nameStartsWith_salaryGte(?, ?)}");
+
+			callableStatement.setString(1, "ka");
+			callableStatement.setInt(2, 12000);
+
+			resultSet = callableStatement.executeQuery();
+
+			while (resultSet.next()) {
+				printRecord(resultSet);
+				System.out.println();
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (callableStatement != null) {
+					callableStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-	private static void printJvmInfo() {
-		/**
-		 * Prints something like this:
-		 *
-		 * Java Version: 1.8.0_482 Java Vendor: Temurin Java Home:
-		 * C:\Users\Manish\AppData\Local\javm\jdk\temurin@8.0.482\jre
-		 */
-		System.out.println("Java Version: " + System.getProperty("java.version"));
-		System.out.println("Java Vendor:  " + System.getProperty("java.vendor"));
-		System.out.println("Java Home:    " + System.getProperty("java.home"));
-		System.out.println();
+	private static void printRecord(ResultSet resultSet) throws SQLException {
+		int snValue = resultSet.getInt("sn");
+		String usernameValue = resultSet.getString("username");
+		String passwordValue = resultSet.getString("password");
+		String fullnameValue = resultSet.getString("fullname");
+		String addressValue = resultSet.getString("address");
+		int salaryValue = resultSet.getInt("salary");
+		System.out.println("sn: " + snValue);
+		System.out.println("username: " + usernameValue);
+		System.out.println("password: " + passwordValue);
+		System.out.println("fullname: " + fullnameValue);
+		System.out.println("address: " + addressValue);
+		System.out.println("salary: " + salaryValue);
 	}
 
 }
