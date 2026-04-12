@@ -1,8 +1,10 @@
-# Project: `04-callable-statement`
+# Project: `04-callable-st--transaction-handling`
+
+## JDBC CallableStatement
 
 Covers usage of **CallableStatement** interface to execute SQL Stored Procedures using JDBC.
 
-## Data for `employee` table:
+### Data for `employee` table:
 Use below INSERT statement:
 
 ```sql
@@ -19,7 +21,7 @@ VALUES
 ('kapu123', '1234', 'Kapu Kant', 'Bommanahalli, Bengaluru', 13900);
 ```
 
-## Create Stored Procedure:
+### Create Stored Procedure:
 Use `CREATE PROCEDURE` SQL statement to create a new stored procedure called `employees_nameStartsWith_salaryGte`
 which returns records of employees whose `fullname` attribute starts with the string `name_prefix` and whose
 `salary` is at least equal to or greater than `min_salary`.
@@ -35,3 +37,8 @@ DELIMITER ;
 
 ```
 
+---
+
+## JDBC Transaction Handling:
+
+Covers how to handle transaction in JDBC, by disabling auto-commit, and using commit & rollback.

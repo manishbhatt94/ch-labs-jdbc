@@ -3,16 +3,84 @@ package com.mainapp;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Launch {
 
 	public static void main(String[] args) {
-		runDemo();
+		callableStatementDemo();
+		transactionHandlingDemo();
 	}
 
-	private static void runDemo() {
+	private static void transactionHandlingDemo() {
+
+		System.out.println("\n### ====== TRANSACTION HANDLING DEMO ====== ###");
+		Scanner scanner = new Scanner(System.in);
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		try {
+
+			String url = "jdbc:mysql://localhost:3306/ch_labs_jdbc_01";
+			String username = "root";
+			String password = "manish";
+
+			connection = DriverManager.getConnection(url, username, password);
+
+			connection.setAutoCommit(false);
+
+			String sql = "UPDATE employee SET salary = ? WHERE username = ?;";
+			preparedStatement = connection.prepareStatement(sql);
+
+			System.out.print("\nEnter employee username (for salary updation): ");
+			String inputUsername = scanner.nextLine();
+
+			int ops = 3;
+
+			while (ops > 0) {
+				System.out.print("\nEnter new salary for employee [" + inputUsername + "]: ");
+				int inputSalary = scanner.nextInt();
+
+				System.out.println("Employee: [" + inputUsername + "] -- Update salary to: [" + inputSalary + "].");
+
+				preparedStatement.setInt(1, inputSalary);
+				preparedStatement.setString(2, inputUsername);
+
+				preparedStatement.executeUpdate();
+
+				ops -= 1;
+			}
+
+			connection.commit();
+			System.out.println("Committing DB updates.");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			try {
+				System.out.println("Rolling back DB updates.");
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+		} finally {
+			scanner.close();
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void callableStatementDemo() {
+
+		System.out.println("\n### ====== CALLABLE STATEMENT DEMO ====== ###");
 
 		Connection connection = null;
 		CallableStatement callableStatement = null;
@@ -53,7 +121,7 @@ public class Launch {
 				System.out.println();
 			}
 
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
