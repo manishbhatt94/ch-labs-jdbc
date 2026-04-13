@@ -58,12 +58,18 @@ public class Launch {
 			connection.commit();
 			System.out.println("Committing DB updates.");
 
+			// Reset auto-commit to true, after committing DB updates.
+			connection.setAutoCommit(true);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 
 			try {
 				System.out.println("Rolling back DB updates.");
 				connection.rollback();
+
+				// Reset auto-commit to true, after rolling-back DB updates.
+				connection.setAutoCommit(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
