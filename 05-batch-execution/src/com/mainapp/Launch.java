@@ -4,9 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Launch {
+
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/ch_labs_jdbc_01";
+	private static final String DB_USERNAME = "root";
+	private static final String DB_PASSWORD = "manish";
 
 	public static void main(String[] args) {
 		batchProcessingDemo();
@@ -22,38 +27,53 @@ public class Launch {
 
 		try {
 
-			String url = "jdbc:mysql://localhost:3306/ch_labs_jdbc_01";
-			String username = "root";
-			String password = "manish";
-
-			connection = DriverManager.getConnection(url, username, password);
+			connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
 			connection.setAutoCommit(false);
 
-			String sql = "UPDATE employee SET salary = ? WHERE username = ?;";
+			String sql = "INSERT INTO employee (username, password, fullname, address, salary)\n"
+					+ " VALUES (?, ?, ?, ?, ?);";
 			preparedStatement = connection.prepareStatement(sql);
 
-			System.out.print("\nEnter employee username (for salary updation): ");
-			String inputUsername = scanner.nextLine();
+			String inputMore = "Y";
+			int recordsInput = 0;
 
-			int ops = 3;
+			while (inputMore.equalsIgnoreCase("Y")) {
+				System.out.println("\n## Enter data for new employee record ##");
+				System.out.print("ENTER USERNAME: ");
+				String username = scanner.next();
+				System.out.print("ENTER PASSWORD: ");
+				String password = scanner.next();
+				scanner.nextLine();
+				System.out.print("ENTER FULLNAME: ");
+				String fullname = scanner.nextLine();
+				System.out.print("ENTER ADDRESS: ");
+				String address = scanner.nextLine();
+				System.out.print("ENTER SALARY: ");
+				int salary = scanner.nextInt();
 
-			while (ops > 0) {
-				System.out.print("\nEnter new salary for employee [" + inputUsername + "]: ");
-				int inputSalary = scanner.nextInt();
+				recordsInput += 1;
 
-				System.out.println("Employee: [" + inputUsername + "] -- Update salary to: [" + inputSalary + "].");
+				preparedStatement.setString(1, username);
+				preparedStatement.setString(2, password);
+				preparedStatement.setString(3, fullname);
+				preparedStatement.setString(4, address);
+				preparedStatement.setInt(5, salary);
 
-				preparedStatement.setInt(1, inputSalary);
-				preparedStatement.setString(2, inputUsername);
+				preparedStatement.addBatch();
 
-//				preparedStatement.addBatch();
-//				preparedStatement.executeBatch();
+				System.out.print("\nDo you want to input more records? (Y/N): ");
+				inputMore = scanner.next()
+						.trim()
+						.toUpperCase();
 
-				preparedStatement.executeUpdate();
-
-				ops -= 1;
 			}
+
+			System.out.println("\nRecords input: " + recordsInput);
+			System.out.println("\nExecuting batch containing " + recordsInput + " records...");
+
+			int[] updateCounts = preparedStatement.executeBatch();
+			System.out.println("\nExecuted batch!\nUpdate Counts: " + Arrays.toString(updateCounts));
 
 			connection.commit();
 			System.out.println("Committing DB updates.");
