@@ -3,6 +3,7 @@ package com.mainapp;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Launch {
 
@@ -17,6 +18,7 @@ public class Launch {
 		System.out.println("\n====== Demo of: DatabaseMetaData interface ======\n");
 
 		Connection connection = null;
+		ResultSet resultSet = null;
 
 		try {
 
@@ -106,9 +108,78 @@ public class Launch {
 			int maxColumnsInSelect = metaData.getMaxColumnsInSelect();
 			System.out.println("Database Max Columns in Select: " + maxColumnsInSelect + "\n");
 
+			/**
+			 * Retrieves the catalog names available in this database. The results are
+			 * ordered by catalog name (<code>TABLE_CAT</code>).
+			 */
+			resultSet = metaData.getCatalogs();
+			System.out.println("Database Catalogs:");
+			while (resultSet.next()) {
+				System.out.println("• " + resultSet.getString("TABLE_CAT"));
+			}
+			System.out.println();
+
+			/**
+			 * Retrieves the schema names available in this database. The results are
+			 * ordered by <code>TABLE_CATALOG</code> and <code>TABLE_SCHEM</code>. *
+			 *
+			 * <P>
+			 * The schema columns are:
+			 * <OL>
+			 * <LI><B>TABLE_SCHEM</B> String {@code =>} schema name</LI>
+			 * <LI><B>TABLE_CATALOG</B> String {@code =>} catalog name (may be
+			 * <code>null</code>)</LI>
+			 * </OL>
+			 */
+			resultSet = metaData.getSchemas();
+			System.out.println("Database Schemas:");
+			while (resultSet.next()) {
+				System.out.print("• ");
+				System.out.print("TABLE_SCHEM [" + resultSet.getString("TABLE_SCHEM") + "]; ");
+				System.out.print("TABLE_CATALOG [" + resultSet.getString("TABLE_CATALOG") + "]; ");
+				System.out.println();
+			}
+			System.out.println();
+
+			/**
+			 * Retrieves a description of the tables available in the given catalog. Only
+			 * table descriptions matching the catalog, schema, table name and type criteria
+			 * are returned. They are ordered by <code>TABLE_TYPE</code>,
+			 * <code>TABLE_CAT</code>, <code>TABLE_SCHEM</code> and <code>TABLE_NAME</code>.
+			 * <P>
+			 * Each table description has the following columns:
+			 * <OL>
+			 * <LI><B>TABLE_CAT</B> String {@code =>} table catalog (may be
+			 * <code>null</code>)</LI>
+			 * <LI><B>TABLE_SCHEM</B> String {@code =>} table schema (may be
+			 * <code>null</code>)</LI>
+			 * <LI><B>TABLE_NAME</B> String {@code =>} table name</LI>
+			 * <LI><B>TABLE_TYPE</B> String {@code =>} table type. Typical types are
+			 * "TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY",
+			 * "ALIAS", "SYNONYM".</LI>
+			 * <LI>Other columns...</LI>
+			 * </OL>
+			 */
+			// 3rd Argument (tableNamePattern) - "product%" - All tables with name starting
+			// with 'product':
+			resultSet = metaData.getTables("jfsseptkart", null, "product%", null);
+			// 3rd Argument (tableNamePattern) - null - All tables:
+			// resultSet = metaData.getTables("jfsseptkart", null, null, null);
+			System.out.println("Database Catalogs:");
+			while (resultSet.next()) {
+				System.out.print("• ");
+				System.out.print("TABLE_CAT [" + resultSet.getString("TABLE_CAT") + "]; ");
+				System.out.print("TABLE_SCHEM [" + resultSet.getString("TABLE_SCHEM") + "]; ");
+				System.out.print("TABLE_NAME [" + resultSet.getString("TABLE_NAME") + "]; ");
+				System.out.print("TABLE_TYPE [" + resultSet.getString("TABLE_TYPE") + "]; ");
+				System.out.println();
+			}
+			System.out.println();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close(connection);
 		}
 	}
