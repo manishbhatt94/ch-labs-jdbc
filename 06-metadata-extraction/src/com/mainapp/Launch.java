@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 public class Launch {
 
@@ -24,7 +25,7 @@ public class Launch {
 
 			connection = ConnectionFactory.getConnection();
 
-			// Get DatabaseMetaData reference object from connection object:
+			// Get DatabaseMetaData reference object from Connection object:
 			/**
 			 * Retrieves a DatabaseMetaData object that contains metadata about the database
 			 * to which this Connection object represents a connection. The metadata
@@ -190,14 +191,112 @@ public class Launch {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 
 		try {
 
 			connection = ConnectionFactory.getConnection();
 
+			String sql = "SELECT * FROM employee;";
+			preparedStatement = connection.prepareStatement(sql);
+
+			resultSet = preparedStatement.executeQuery();
+
+			// Get ResultSetMetaData reference object from ResultSet object:
+			/**
+			 * Retrieves the number, types and properties of this ResultSet object's
+			 * columns.
+			 *
+			 * Returns: the description of this ResultSet object's columns.
+			 */
+			ResultSetMetaData metaData = resultSet.getMetaData();
+
+			/**
+			 * Returns the number of columns in this ResultSet object.
+			 */
+			int columnCount = metaData.getColumnCount();
+			System.out.println("Column Count: " + columnCount + "\n");
+
+			/**
+			 * Print column names using: ResultSetMetaData#getColumnName:
+			 *
+			 * Get the designated column's name.
+			 *
+			 * String getColumnName(int column) throws SQLException;
+			 */
+			System.out.println("Column Names:");
+			for (int i = 1; i <= columnCount; i++) {
+				System.out.println("• " + metaData.getColumnName(i));
+			}
+			System.out.println();
+
+			/**
+			 * Print column's corresponding Java class (FQN) using:
+			 * ResultSetMetaData#getColumnClassName:
+			 *
+			 * Returns the fully-qualified name of the Java class whose instances are
+			 * manufactured if the method <code>ResultSet.getObject</code> is called to
+			 * retrieve a value from the column.
+			 *
+			 * String getColumnClassName(int column) throws SQLException;
+			 */
+			System.out.println("Column Class Names:");
+			for (int i = 1; i <= columnCount; i++) {
+				System.out.println("• " + metaData.getColumnClassName(i));
+			}
+			System.out.println();
+
+			/**
+			 * Print column's display size (or width) using:
+			 * ResultSetMetaData#getColumnDisplaySize:
+			 *
+			 * Indicates the designated column's normal maximum width in characters.
+			 *
+			 * (the normal maximum number of characters allowed as the width of the
+			 * designated column)
+			 *
+			 * int getColumnDisplaySize(int column) throws SQLException;
+			 */
+			System.out.println("Column Display Sizes:");
+			for (int i = 1; i <= columnCount; i++) {
+				System.out.println("• " + metaData.getColumnDisplaySize(i));
+			}
+			System.out.println();
+
+			/**
+			 * Print column's database type using: ResultSetMetaData#getColumnTypeName:
+			 *
+			 * Retrieves the designated column's database-specific type name.
+			 *
+			 * (type name used by the database. If the column type is a user-defined type,
+			 * then a fully-qualified type name is returned.)
+			 *
+			 * String getColumnTypeName(int column) throws SQLException;
+			 */
+			System.out.println("Column Type Names (DB Specific):");
+			for (int i = 1; i <= columnCount; i++) {
+				System.out.println("• " + metaData.getColumnTypeName(i));
+			}
+			System.out.println();
+
+			/**
+			 * Gets the designated column's table name.
+			 */
+			String tableName = metaData.getTableName(1);
+			System.out.println("Table Name: " + tableName + "\n");
+
+			/**
+			 * Gets the designated column's table's catalog name.
+			 *
+			 * ("catalog name": i.e. the database name).
+			 */
+			String databaseName = metaData.getCatalogName(1);
+			System.out.println("Database Name: " + databaseName + "\n");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close(preparedStatement);
 			ConnectionFactory.close(connection);
 		}
