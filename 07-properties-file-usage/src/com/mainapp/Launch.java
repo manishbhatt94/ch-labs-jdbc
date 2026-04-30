@@ -17,7 +17,10 @@ public class Launch {
 	 * mysql.password=manish
 	 * </pre>
 	 */
-	private static final String CONFIG_FILE_PATH = "C:\\Users\\Manish\\Dev\\dummy-files-dump\\myconfig.properties";
+	// private static final String CONFIG_FILE_PATH =
+	// "C:\\Users\\Manish\\Dev\\dummy-files-dump\\myconfig.properties";
+	private static final String CONFIG_FILE_PATH = "myconfig.properties"; // No full path required when file is placed
+																			// directly inside the project directory.
 
 	public static void main(String[] args) {
 
