@@ -1,0 +1,4 @@
+# mysql.url=jdbc:mysql://localhost:3306/ch_labs_jdbc_01
+mysql.url=jdbc:mysql://localhost:3306/jfsseptkart
+mysql.user=root
+mysql.password=manish
