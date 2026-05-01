@@ -45,3 +45,29 @@ name "pool-hikaricp-3.1.0" and clicked "OK".
 - Click "Finish" button from the previous popup.
 - Finally, click the "Apply and Close" button from the original project
 properties "Java Build Path" popup.
+
+---
+
+# Program Output
+
+Program's sample run output:
+
+```txt
+Reading configuration properties from .properties file...
+Loaded Properties object -- {mysql.password=manish, mysql.url=jdbc:mysql://localhost:3306/ch_labs_jdbc_01, mysql.user=root}
+
+Creating HikariConfig object using loaded configuration properties...
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Added configuration to HikariConfig object -- com.zaxxer.hikari.HikariConfig@6e0be858
+
+Creating HikarDataSource object using the HikariConfig object...
+Constructed (with config) new HikariDataSource object -- HikariDataSource (HikariPool-1)
+
+Getting a Connection object from the pool managed by HikariDataSource...
+Connection object: HikariProxyConnection@1122805102 wrapping com.mysql.cj.jdbc.ConnectionImpl@52f759d7
+Connection with database: ch_labs_jdbc_01
+
+Returned Connection object back to the pool.
+```
