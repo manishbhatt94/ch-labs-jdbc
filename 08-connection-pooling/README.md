@@ -1,9 +1,12 @@
 # JAR(s) Required for using HikariCP library for JDBC Connection Pooling
 
-1. **HikariCP**:
-	<br>
-    We will use version `3.1.0`.<br>
-    MVN Repository Link: [com.zaxxer/HikariCP/3.1.0](https://mvnrepository.com/artifact/com.zaxxer/HikariCP/3.1.0)
+1. **HikariCP**:<br>
+    - We will use version `3.1.0`.<br>
+    - MVN Repository Link: [com.zaxxer/HikariCP/3.1.0](https://mvnrepository.com/artifact/com.zaxxer/HikariCP/3.1.0)
+2. **SLF4J**:<br>
+    (Since `org.slf4j.LoggerFactory` class is used by HikariCP)<br>
+    - We will use version `1.7.5`.<br>
+    - MVN Repository Link: [org.slf4j/slf4j-api/1.7.5](https://mvnrepository.com/artifact/org.slf4j/slf4j-api/1.7.5)
 
 ## Download the Library JAR file
 - Go to the provided (above) MVN Repository Link(s).
@@ -31,6 +34,7 @@ we will do that now.
 - Which opens a tiny dialog box "New User Library" - where we need to enter a
 name for our library. Enter any name and click "OK" button. E.g. I used the
 name "pool-hikaricp-3.1.0" and clicked "OK".
+- And "slf4j-api-1.7.5" name for the SLF4J Library name.
 - This creates a new entry with this name in the previous popup's list of
 "Defined user libraries:" with the name we provided in previous step, i.e.
 "pool-hikaricp-3.1.0".
