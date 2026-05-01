@@ -70,4 +70,7 @@ Connection object: HikariProxyConnection@1122805102 wrapping com.mysql.cj.jdbc.C
 Connection with database: ch_labs_jdbc_01
 
 Returned Connection object back to the pool.
+
+Closed entire connection pool.
+
 ```
