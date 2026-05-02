@@ -1,4 +1,6 @@
-# JAR(s) Required for using HikariCP library for JDBC Connection Pooling
+# Project: `08-connection-pooling`
+
+## JAR(s) Required for using HikariCP library for JDBC Connection Pooling
 
 1. **HikariCP**:<br>
     - We will use version `3.1.0`.<br>
@@ -8,14 +10,14 @@
     - We will use version `1.7.5`.<br>
     - MVN Repository Link: [org.slf4j/slf4j-api/1.7.5](https://mvnrepository.com/artifact/org.slf4j/slf4j-api/1.7.5)
 
-## Download the Library JAR file
+### Download the Library JAR file
 - Go to the provided (above) MVN Repository Link(s).
 - Under the "Overview" tab, there is a "Files" line item.
 - This has a button called "bundle" (if not then "jar"). Click this button.
 - Clicking it, will start the download of the JAR file in your Downloads folder.
 
 
-## Adding the JAR to the project manually
+### Adding the JAR to the project manually
 
 - Right-click the project, and select Properties from the context menu.
 - From the Project Properties popup, select Java Build Path menu option from
@@ -48,7 +50,7 @@ properties "Java Build Path" popup.
 
 ---
 
-# Program Output
+## Program Output
 
 Program's sample run output:
 
