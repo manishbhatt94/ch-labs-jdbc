@@ -18,7 +18,11 @@ VALUES
 ('ramu123', '1234', 'Ramu Orange', 'Basavanagudi, Bengaluru', 14000),
 ('raut123', '1234', 'Raut Tata', 'Malleshwaram, Bengaluru', 11400),
 ('kalu123', '1234', 'Kalu Apple', 'Halasuru, Bengaluru', 14500),
-('kapu123', '1234', 'Kapu Kant', 'Bommanahalli, Bengaluru', 13900);
+('kapu123', '1234', 'Kapu Kant', 'Bommanahalli, Bengaluru', 13900),
+('baju123','1234','Baju Baja','Adugodi, Bengaluru',13960),
+('balu123','1234','Balu Bala','Kumaraswamy Layout, Bengaluru',14720),
+('begu123','1234','Begu Bega','Itamadu, Bengaluru',16300),
+('beku123','1234','Beku Beka','Hosakerehalli, Bengaluru',15980);
 ```
 
 ### Create Stored Procedure:
